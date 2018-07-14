@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Book {
   @Id
   @Column(name = "book_id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(name = "book_title", nullable = false)
@@ -19,16 +19,16 @@ public class Book {
   private int pageCount;
 
   @ManyToOne
-  @JoinColumn(name = "author_id", nullable = false, updatable = false)
-  private Author author;
+  @JoinColumn(name = "user_id", nullable = false, updatable = false)
+  private User user;
 
   public Book() {}
 
-  public Book(String title, String isbn, int pageCount, Author author) {
+  public Book(String title, String isbn, int pageCount, User user) {
     this.title = title;
     this.isbn = isbn;
     this.pageCount = pageCount;
-    this.author = author;
+    this.user = user;
   }
 
   public Long getId() {
@@ -63,12 +63,12 @@ public class Book {
     this.pageCount = pageCount;
   }
 
-  public Author getAuthor() {
-    return author;
+  public User getUser() {
+    return user;
   }
 
-  public void setAuthor(Author author) {
-    this.author = author;
+  public void setUser(User user) {
+    this.user = user;
   }
 
   @Override
@@ -99,8 +99,8 @@ public class Book {
         + '\''
         + ", pageCount="
         + pageCount
-        + ", author="
-        + author
+        + ", user="
+        + user
         + '}';
   }
 }

@@ -8,12 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AuthorNotFoundException extends RuntimeException implements GraphQLError {
+public class UserNotFoundException extends RuntimeException implements GraphQLError {
   private Map<String, Object> extensions = new HashMap<>();
 
-  public AuthorNotFoundException(String message, Long invalidBookId) {
+  public UserNotFoundException(String message, Long invalidUserId) {
     super(message);
-    extensions.put("invalid Author Id", invalidBookId);
+    extensions.put("invalid User Id", invalidUserId);
+  }
+
+  public UserNotFoundException(String message, String invalidUsername) {
+    super(message);
+    extensions.put("invalid User Name", invalidUsername);
   }
 
   @Override

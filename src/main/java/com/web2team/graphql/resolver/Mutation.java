@@ -2,33 +2,36 @@ package com.web2team.graphql.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.web2team.graphql.exception.BookNotFoundException;
-import com.web2team.graphql.model.Author;
 import com.web2team.graphql.model.Book;
-import com.web2team.graphql.repository.AuthorRepository;
+import com.web2team.graphql.model.User;
 import com.web2team.graphql.repository.BookRepository;
+import com.web2team.graphql.repository.UserRepository;
 
 public class Mutation implements GraphQLMutationResolver {
   private BookRepository bookRepository;
-  private AuthorRepository authorRepository;
+  private UserRepository userRepository;
 
-  public Mutation(AuthorRepository authorRepository, BookRepository bookRepository) {
-    this.authorRepository = authorRepository;
+  public Mutation(UserRepository userRepository, BookRepository bookRepository) {
+    this.userRepository = userRepository;
     this.bookRepository = bookRepository;
   }
 
-  public Author newAuthor(String firstName, String lastName) {
-    Author author = new Author();
-    author.setFirstName(firstName);
-    author.setLastName(lastName);
+  public User newUser(String user_id, String password, String name, String email) {
+    User user = new User();
+    user.setNickname(name);
+    user.setEmail(email);
+    user.setUsername(user_id);
+    user.setPassword(password);
 
-    authorRepository.save(author);
+    userRepository.save(user);
 
-    return author;
+    return user;
   }
 
-  public Book newBook(String title, String isbn, Integer pageCount, Long authorId) {
+  public Book newBook(String title, String isbn, Integer pageCount, Long userId) {
     Book book = new Book();
-    book.setAuthor(new Author(authorId));
+
+    book.setUser(new User(userId));
     book.setTitle(title);
     book.setIsbn(isbn);
     book.setPageCount(pageCount != null ? pageCount : 0);
