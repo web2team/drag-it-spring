@@ -37,16 +37,16 @@ public class GraphqlConfiguration {
     return new Mutation(userRepository, bookRepository);
   }
 
-  @Bean
-  public CommandLineRunner demo(UserRepository userRepository, BookRepository bookRepository) {
-    return (args) -> {
-      User user = new User("username123", "password123", "nicknameHI", "emails");
-      userRepository.save(user);
-
-//      bookRepository.save(
-//          new Book("Java: A Beginner's Guide, Sixth Edition", "0071809252", 728, user));
-    };
-  }
+//  @Bean
+//  public CommandLineRunner demo(UserRepository userRepository, BookRepository bookRepository) {
+//    return (args) -> {
+//      User user = new User("username123", "password123", "nicknameHI", "emails");
+//      userRepository.save(user);
+//
+////      bookRepository.save(
+////          new Book("Java: A Beginner's Guide, Sixth Edition", "0071809252", 728, user));
+//    };
+//  }
 
   @Bean
   public GraphQLErrorHandler errorHandler() {
