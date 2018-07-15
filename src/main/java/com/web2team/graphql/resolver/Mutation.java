@@ -6,7 +6,9 @@ import com.web2team.graphql.model.Book;
 import com.web2team.graphql.model.User;
 import com.web2team.graphql.repository.BookRepository;
 import com.web2team.graphql.repository.UserRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Mutation implements GraphQLMutationResolver {
   private BookRepository bookRepository;
   private UserRepository userRepository;

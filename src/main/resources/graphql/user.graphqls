@@ -11,6 +11,7 @@ type Query {
     findOneUserByUserName(username: String!): User!
     findOneUserByUserId(user_id: ID!): User!
     countUsers: Long!
+    findAllUserOnUserResolver: [User]!
 }
 
 type Mutation {

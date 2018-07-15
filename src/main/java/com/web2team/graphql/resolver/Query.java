@@ -7,11 +7,15 @@ import com.web2team.graphql.model.Book;
 import com.web2team.graphql.model.User;
 import com.web2team.graphql.repository.BookRepository;
 import com.web2team.graphql.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Query implements GraphQLQueryResolver {
   private BookRepository bookRepository;
   private UserRepository userRepository;
 
+  @Autowired
   public Query(UserRepository userRepository, BookRepository bookRepository) {
     this.userRepository = userRepository;
     this.bookRepository = bookRepository;

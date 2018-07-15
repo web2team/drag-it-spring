@@ -22,20 +22,20 @@ import java.util.stream.Collectors;
 @Configuration
 public class GraphqlConfiguration {
 
-  @Bean
-  public UserResolver userResolver(UserRepository userRepository) {
-    return new UserResolver(userRepository);
-  }
+//  @Bean
+//  public UserResolver userResolver(UserRepository userRepository) {
+//    return new UserResolver(userRepository);
+//  }
 
-  @Bean
-  public Query query(UserRepository userRepository, BookRepository bookRepository) {
-    return new Query(userRepository, bookRepository);
-  }
+//  @Bean
+//  public Query query(UserRepository userRepository, BookRepository bookRepository) {
+//    return new Query(userRepository, bookRepository);
+//  }
 
-  @Bean
-  public Mutation mutation(UserRepository userRepository, BookRepository bookRepository) {
-    return new Mutation(userRepository, bookRepository);
-  }
+//  @Bean
+//  public Mutation mutation(UserRepository userRepository, BookRepository bookRepository) {
+//    return new Mutation(userRepository, bookRepository);
+//  }
 
 //  @Bean
 //  public CommandLineRunner demo(UserRepository userRepository, BookRepository bookRepository) {
