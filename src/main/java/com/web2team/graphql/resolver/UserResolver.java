@@ -15,7 +15,7 @@ public class UserResolver implements GraphQLResolver<Book> {
     this.userRepository = userRepository;
   }
 
-  public User getUser1234(Book book) {
+  public User getUser(Book book) {
     return userRepository
         .findById(book.getUser().getId())
         .orElseThrow(

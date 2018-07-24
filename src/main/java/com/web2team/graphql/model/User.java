@@ -29,12 +29,12 @@ public class User {
   private String password;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "created_time", nullable = false)
-  private Date created_time;
+  @Column(name = "created_at", nullable = false)
+  private Date created_at;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "updated_time", nullable = false)
-  private Date updated_time;
+  @Column(name = "updated_at", nullable = false)
+  private Date updated_at;
 
   public User(Long id) {
     this.id = id;
@@ -49,11 +49,11 @@ public class User {
 
   @PrePersist
   protected void onCreate() {
-    this.updated_time = this.created_time = new Date();
+    this.updated_at = this.created_at = new Date();
   }
 
   @PreUpdate
   protected void onUpdate() {
-    this.updated_time = new Date();
+    this.updated_at = new Date();
   }
 }
