@@ -6,8 +6,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class User {
@@ -16,17 +18,17 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "username", nullable = false, unique = true)
-  private String username;
-
-  @Column(name = "nickname", nullable = false)
-  private String nickname;
-
-  @Column(name = "email", nullable = false)
+  @Column(name = "email", nullable = false, unique = true)
   private String email;
 
   @Column(name = "password", nullable = false)
   private String password;
+
+  @Column(name = "username", nullable = false)
+  private String username;
+
+  @Column(name = "phone")
+  private String phone;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "created_at", nullable = false)
@@ -38,13 +40,6 @@ public class User {
 
   public User(Long id) {
     this.id = id;
-  }
-
-  public User(String username, String password, String nickname, String email) {
-    this.username = username;
-    this.password = password;
-    this.nickname = nickname;
-    this.email = email;
   }
 
   @PrePersist

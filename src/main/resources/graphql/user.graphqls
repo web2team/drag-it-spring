@@ -1,9 +1,11 @@
 type User {
     id: ID!
-    username: String!
+    email: String!
     password: String!
-    nickname: String
-    email: String
+    username: String!
+    phone: String
+    created_at: String!
+    updated_at: String!
 }
 
 type Query {
