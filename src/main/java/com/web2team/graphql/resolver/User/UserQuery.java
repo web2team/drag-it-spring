@@ -14,8 +14,6 @@ public class UserQuery implements GraphQLQueryResolver {
   private UserRepository userRepository;
 
   public Iterable<User> findAllUsers(DataFetchingEnvironment env) {
-    System.out.println("UserQuery context" + env.getContext().toString());
-
     return userRepository.findAll();
   }
 

@@ -6,7 +6,6 @@ import com.web2team.security.filter.JwtAuthenticationTokenFilter;
 import com.web2team.security.handler.JwtAuthenticationFailureHandler;
 import com.web2team.security.handler.JwtAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,6 +17,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
@@ -50,9 +55,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return authenticationTokenFilter;
   }
 
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+    return source;
+  }
+
   @Override
   protected void configure(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
+        .cors()
+        .and()
         // we don't need CSRF because our token is invulnerable
         .csrf()
         .disable()
