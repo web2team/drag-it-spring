@@ -19,3 +19,15 @@ type Query {
 type Mutation {
     newUser(username: String!, password: String!, nickname: String!, email: String!) : User!
 }
+
+type Subscription {
+    stockQuotes(stockCodes:[String]) : StockPriceUpdate!
+    getUserRegisterList: User!
+}
+
+type StockPriceUpdate {
+    dateTime : String
+    stockCode : String
+    stockPrice : Float
+    stockPriceChange : Float
+}

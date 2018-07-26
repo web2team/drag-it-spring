@@ -1,5 +1,6 @@
 package com.web2team.restful.controller;
 
+import com.web2team.graphql.event.RxBus;
 import com.web2team.graphql.model.User;
 import com.web2team.graphql.repository.UserRepository;
 import com.web2team.restful.model.LoginRequestBody;
@@ -21,13 +22,15 @@ import java.util.Optional;
 @RestController
 public class LoginController {
   private final UserRepository userRepository;
+  private final RxBus rxBus;
 
   @Value("${security.jwt.secret}")
   private String secret;
 
   @Autowired
-  public LoginController(UserRepository userRepository) {
+  public LoginController(UserRepository userRepository, RxBus rxBus) {
     this.userRepository = userRepository;
+    this.rxBus = rxBus;
   }
 
   @PostMapping("/login")
@@ -74,6 +77,8 @@ public class LoginController {
     newUser.setPhone(phone);
 
     userRepository.save(newUser);
+    rxBus.send(userRepository.findUserByEmailEquals(email).get());
+
     return new ResponseEntity<>(new RegisterResponseData(""), HttpStatus.OK);
   }
 }

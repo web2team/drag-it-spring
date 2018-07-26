@@ -1,13 +1,8 @@
 package com.web2team.graphql.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.coxautodev.graphql.tools.GraphQLResolver;
-import com.web2team.graphql.model.Book;
 import com.web2team.graphql.model.User;
 import com.web2team.graphql.repository.UserRepository;
-import graphql.annotations.annotationTypes.GraphQLField;
-import graphql.annotations.annotationTypes.GraphQLName;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
