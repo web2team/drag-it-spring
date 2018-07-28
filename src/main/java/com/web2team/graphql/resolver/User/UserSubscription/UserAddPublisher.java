@@ -8,20 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserAddPublisher {
-
-  private final RxBus rxBus;
+class UserAddPublisher {
+  private final RxBus<User> userRxBus;
 
   @Autowired
-  public UserAddPublisher(RxBus rxBus) {
-    this.rxBus = rxBus;
+  public UserAddPublisher(RxBus<User> userRxBus) {
+    this.userRxBus = userRxBus;
   }
 
   public RxBus getBus() {
-    return this.rxBus;
+    return this.userRxBus;
   }
 
-  public Flowable<User> getPublisher() {
-    return rxBus.toFlowable(BackpressureStrategy.BUFFER);
+  Flowable<User> getPublisher() {
+    return userRxBus.toFlowable(BackpressureStrategy.BUFFER);
   }
 }

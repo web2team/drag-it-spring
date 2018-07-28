@@ -1,3 +1,0 @@
-#type Subscription {
-#    appendChat(chat: String!): Comment
-#}

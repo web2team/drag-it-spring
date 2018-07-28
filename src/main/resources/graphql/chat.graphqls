@@ -1,0 +1,18 @@
+type Chat {
+    id: ID!
+    username: String!
+    contents: String!
+    createdAt: String!
+}
+
+extend type Query {
+    getAllMessages(chat_thread_id: ID!): [Chat]!
+}
+
+extend type Mutation {
+    newChatMessage(chat_thread_id: ID!, username: String! contents: String!): Chat!
+}
+
+extend type Subscription {
+    ChatMessage(chat_thread_id: ID!): Chat
+}

@@ -1,28 +1,24 @@
 package com.web2team.graphql.event;
 
-import com.web2team.graphql.model.User;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
-import org.springframework.stereotype.Component;
 
-@Component
-public class RxBus {
+public class RxBus<T> {
   public RxBus() {}
 
-  private PublishSubject<User> bus = PublishSubject.create();
+  private PublishSubject<T> bus = PublishSubject.create();
 
-  public void send(User user) {
-    System.out.println("on rx send");
-    bus.onNext(user);
+  public void send(T data) {
+    bus.onNext(data);
   }
 
-  public Observable<User> toObservable() {
+  public Observable<T> toObservable() {
     return bus;
   }
 
-  public Flowable<User> toFlowable(BackpressureStrategy buffer) {
+  public Flowable<T> toFlowable(BackpressureStrategy buffer) {
     return bus.toFlowable(buffer);
   }
 }

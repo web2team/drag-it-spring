@@ -32,11 +32,11 @@ public class User {
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "created_at", nullable = false)
-  private Date created_at;
+  private Date createdAt;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated_at", nullable = false)
-  private Date updated_at;
+  private Date updatedAt;
 
   public User(Long id) {
     this.id = id;
@@ -44,11 +44,11 @@ public class User {
 
   @PrePersist
   protected void onCreate() {
-    this.updated_at = this.created_at = new Date();
+    this.updatedAt = this.createdAt = new Date();
   }
 
   @PreUpdate
   protected void onUpdate() {
-    this.updated_at = new Date();
+    this.updatedAt = new Date();
   }
 }

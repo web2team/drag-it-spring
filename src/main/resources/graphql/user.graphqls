@@ -4,8 +4,8 @@ type User {
     password: String!
     username: String!
     phone: String
-    created_at: String!
-    updated_at: String!
+    createdAt: String!
+    updatedAt: String!
 }
 
 type Query {

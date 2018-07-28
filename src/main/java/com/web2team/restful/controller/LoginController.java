@@ -22,15 +22,15 @@ import java.util.Optional;
 @RestController
 public class LoginController {
   private final UserRepository userRepository;
-  private final RxBus rxBus;
+  private final RxBus<User> userRxBus;
 
   @Value("${security.jwt.secret}")
   private String secret;
 
   @Autowired
-  public LoginController(UserRepository userRepository, RxBus rxBus) {
+  public LoginController(UserRepository userRepository, RxBus<User> userRxBus) {
     this.userRepository = userRepository;
-    this.rxBus = rxBus;
+    this.userRxBus = userRxBus;
   }
 
   @PostMapping("/login")
@@ -76,8 +76,8 @@ public class LoginController {
     newUser.setPassword(password);
     newUser.setPhone(phone);
 
-    userRepository.save(newUser);
-    rxBus.send(userRepository.findUserByEmailEquals(email).get());
+    User savedUser = userRepository.save(newUser);
+    userRxBus.send(savedUser);
 
     return new ResponseEntity<>(new RegisterResponseData(""), HttpStatus.OK);
   }
