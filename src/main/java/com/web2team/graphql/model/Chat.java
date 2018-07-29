@@ -19,6 +19,7 @@ public class Chat {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdAt;
 
+  @Column(name = "chat_thread_id")
   private Long chatThreadId;
 
   @PrePersist

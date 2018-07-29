@@ -17,7 +17,7 @@ public class JwtTokenGenerator {
     return Jwts.builder()
         .setClaims(claims)
         .signWith(SignatureAlgorithm.HS512, secret)
-        .setExpiration(DateTime.now().plusSeconds(30).toDate())
+        .setExpiration(DateTime.now().plusDays(1).toDate())
         .compact();
   }
 }

@@ -18,9 +18,9 @@ public class ChatMutation implements GraphQLMutationResolver {
     this.chatRxBus = chatRxBus;
   }
 
-  public Chat newChatMessage(Long chat_thread_id, String username, String contents) {
+  public Chat newChatMessage(Long chatThreadId, String username, String contents) {
     Chat newChatMessage = new Chat();
-    newChatMessage.setChatThreadId(chat_thread_id);
+    newChatMessage.setChatThreadId(chatThreadId);
     newChatMessage.setUsername(username);
     newChatMessage.setContents(contents);
 

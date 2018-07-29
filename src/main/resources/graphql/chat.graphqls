@@ -3,6 +3,7 @@ type Chat {
     username: String!
     contents: String!
     createdAt: String!
+    chatThreadId: ID!
 }
 
 extend type Query {
