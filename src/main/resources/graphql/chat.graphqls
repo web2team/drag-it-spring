@@ -8,6 +8,7 @@ type Chat {
 
 extend type Query {
     getAllMessages(chat_thread_id: ID!): [Chat]!
+    getMessages(chat_thread_id: ID!, page: Int!, size: Int!): [Chat]!
 }
 
 extend type Mutation {
