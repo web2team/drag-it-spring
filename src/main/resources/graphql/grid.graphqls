@@ -1,0 +1,61 @@
+enum GridComponentType {
+    CHATTING
+}
+
+type GridComponentProps {
+    id: ID!
+    chat_thread_id: ID
+}
+
+type GridData {
+    id: ID!
+
+    key: String!
+    x: Int!
+    y: Int!
+    w: Int!
+    h: Int!
+
+    maxH: Int
+    maxW: Int
+    minH: Int
+    minW: Int
+
+    isDraggable: Boolean
+    isResizable: Boolean
+    isStatic: Boolean
+    draggableHandle: String
+}
+
+input GridDataInput {
+    x: Int
+    y: Int
+    w: Int
+    h: Int
+
+    maxH: Int
+    maxW: Int
+    minH: Int
+    minW: Int
+
+    isDraggable: Boolean
+    isResizable: Boolean
+    isStatic: Boolean
+    draggableHandle: String
+}
+
+type GridDraggableProps {
+    id: ID!
+    gridId: ID!
+    gridData: GridData!
+    gridComponentType: GridComponentType
+    gridComponentProps: GridComponentProps
+}
+
+extend type Query {
+    getGridDraggableProps(grid_id: ID!): [GridDraggableProps]!
+}
+
+extend type Mutation {
+    changeGridLayout(grid_id: ID!, gridDraggableProps_id: ID!, newGridData: GridDataInput!): GridData!
+}
