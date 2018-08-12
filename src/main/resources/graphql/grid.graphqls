@@ -8,9 +8,8 @@ type GridComponentProps {
 }
 
 type GridData {
-    id: ID!
+    key: ID!
 
-    key: String!
     x: Int!
     y: Int!
     w: Int!

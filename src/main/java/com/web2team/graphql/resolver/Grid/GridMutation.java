@@ -3,7 +3,7 @@ package com.web2team.graphql.resolver.Grid;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.web2team.graphql.model.Grid.GridData;
 import com.web2team.graphql.repository.Grid.GridDataRepository;
-import com.web2team.graphql.repository.Grid.GridDraggablePropsRepository;
+import com.web2team.graphql.repository.Grid.GridDraggableLayoutRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 @Component
 @AllArgsConstructor
 public class GridMutation implements GraphQLMutationResolver {
-  private GridDraggablePropsRepository gridRepository;
+  private GridDraggableLayoutRepository gridRepository;
   private GridDataRepository gridDataRepository;
 
   public GridData changeGridLayout(Long grid_id, Long gridDraggableProps_id, GridData newGridData)

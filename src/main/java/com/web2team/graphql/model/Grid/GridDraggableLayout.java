@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class GridDraggableProps {
+public class GridDraggableLayout {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -20,3 +20,4 @@ public class GridDraggableProps {
   @Enumerated(EnumType.STRING)
   private GridComponentType gridComponentType;
 }
+

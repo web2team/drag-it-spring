@@ -9,10 +9,9 @@ import javax.persistence.*;
 public class GridData {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Column(name = "id")
+  private Long key;
 
-  @Column(name = "_key")
-  private String key;
   private Integer x;
   private Integer y;
   private Integer w;
