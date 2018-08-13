@@ -2,7 +2,7 @@ package com.web2team.restful.controller;
 
 import com.web2team.graphql.event.RxBus;
 import com.web2team.graphql.model.User;
-import com.web2team.graphql.repository.UserRepository;
+import com.web2team.graphql.repository.User.UserRepository;
 import com.web2team.restful.model.LoginRequestBody;
 import com.web2team.restful.model.LoginResponseData;
 import com.web2team.restful.model.RegisterReqeustBody;
@@ -44,14 +44,15 @@ public class LoginController {
         .map(
             user -> {
               JwtUserDto userDto = new JwtUserDto();
-              userDto.setUsername(user.getUsername());
+              userDto.setUsername(user.getName());
               userDto.setRole("user");
 
               final String token = JwtTokenGenerator.generateToken(userDto, secret);
               LoginResponseData loginResponseData = new LoginResponseData();
               loginResponseData.setTime(0);
               loginResponseData.setToken(token);
-              loginResponseData.setUserName(user.getUsername());
+              loginResponseData.setUserName(user.getName());
+              loginResponseData.setUserId(user.getId());
 
               return new ResponseEntity<>(loginResponseData, HttpStatus.OK);
             })
@@ -73,7 +74,7 @@ public class LoginController {
 
     User newUser = new User();
     newUser.setEmail(email);
-    newUser.setUsername(userName);
+    newUser.setName(userName);
     newUser.setPassword(password);
     newUser.setPhone(phone);
 

@@ -2,7 +2,7 @@ type User {
     id: ID!
     email: String!
     password: String!
-    username: String!
+    name: String!
     phone: String
     createdAt: String!
     updatedAt: String!
@@ -11,13 +11,12 @@ type User {
 type Query {
     findAllUsers: [User]!
     findOneUserByUserName(username: String!): User!
-    findOneUserByUserId(user_id: ID!): User!
+    findOneUserByUserId(userId: ID!): User!
     countUsers: Long!
     findAllUserOnUserResolver: [User]!
 }
 
 type Mutation {
-    newUser(username: String!, password: String!, nickname: String!, email: String!) : User!
 }
 
 type Subscription {

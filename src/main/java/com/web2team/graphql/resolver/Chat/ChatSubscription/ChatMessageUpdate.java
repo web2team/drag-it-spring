@@ -1,7 +1,7 @@
 package com.web2team.graphql.resolver.Chat.ChatSubscription;
 
 import com.coxautodev.graphql.tools.GraphQLSubscriptionResolver;
-import com.web2team.graphql.model.Chat;
+import com.web2team.graphql.model.Chat.Chat;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ class ChatMessageUpdate implements GraphQLSubscriptionResolver {
     this.chatMessagePublisher = chatMessagePublisher;
   }
 
-  Publisher<Chat> ChatMessage(Long chat_thread_id) {
-    return chatMessagePublisher.getPublisher(chat_thread_id);
+  Publisher<Chat> linkChatMessage(Long chatThreadId) {
+    return chatMessagePublisher.getPublisher(chatThreadId);
   }
 }

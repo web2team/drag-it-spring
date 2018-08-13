@@ -1,6 +1,6 @@
 package com.web2team.graphql.event;
 
-import com.web2team.graphql.model.Chat;
+import com.web2team.graphql.model.Chat.Chat;
 import com.web2team.graphql.model.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

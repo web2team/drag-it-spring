@@ -3,7 +3,7 @@ package com.web2team.graphql.resolver.User;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.web2team.graphql.exception.UserNotFoundException;
 import com.web2team.graphql.model.User;
-import com.web2team.graphql.repository.UserRepository;
+import com.web2team.graphql.repository.User.UserRepository;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class UserQuery implements GraphQLQueryResolver {
 
   public User findOneUserByUserName(String username) {
     for (User user : userRepository.findAll()) {
-      if (user.getUsername().equals(username)) {
+      if (user.getName().equals(username)) {
         return user;
       }
     }

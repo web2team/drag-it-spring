@@ -7,7 +7,7 @@ import com.web2team.graphql.model.User;
 import com.web2team.graphql.repository.Grid.GridDataRepository;
 import com.web2team.graphql.repository.Grid.GridDraggableLayoutRepository;
 import com.web2team.graphql.repository.Grid.GridRepository;
-import com.web2team.graphql.repository.UserRepository;
+import com.web2team.graphql.repository.User.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +22,12 @@ public class GridMutation implements GraphQLMutationResolver {
   private GridRepository gridRepository;
   private UserRepository userRepository;
 
-  public GridData changeGridLayout(Long grid_id, Long gridDraggableProps_id, GridData newGridData)
+  public GridData updateGridLayout(Long gridId, Long gridDraggablePropsId, GridData newGridData)
       throws InstantiationException, IllegalAccessException {
 
     GridData origin =
         gridDraggableLayoutRepository
-            .findByGridIdEqualsAndIdEquals(grid_id, gridDraggableProps_id)
+            .findByGridIdEqualsAndIdEquals(gridId, gridDraggablePropsId)
             .getGridData();
 
     GridData toSave = mergeObjects(origin, newGridData);
@@ -35,10 +35,10 @@ public class GridMutation implements GraphQLMutationResolver {
     return gridDataRepository.save(toSave);
   }
 
-  public Grid updateGridName(Long grid_id, String name) {
+  public Grid updateGridName(Long gridId, String name) {
     Grid target =
         gridRepository
-            .findById(grid_id)
+            .findById(gridId)
             .orElseThrow(() -> new NoSuchElementException("invalid grid id"));
 
     target.setName(name);

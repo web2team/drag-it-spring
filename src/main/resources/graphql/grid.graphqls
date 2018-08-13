@@ -4,7 +4,7 @@ enum GridComponentType {
 
 type GridComponentProps {
     id: ID!
-    chat_thread_id: ID
+    chatThreadId: ID
 }
 
 type Grid {
@@ -48,7 +48,7 @@ input GridDataInput {
     draggableHandle: String
 }
 
-type GridDraggableProps {
+type GridDraggableLayout {
     id: ID!
     gridId: ID!
     gridData: GridData!
@@ -57,13 +57,13 @@ type GridDraggableProps {
 }
 
 extend type Query {
-    getGridDraggableProps(grid_id: ID!): [GridDraggableProps]!
+    getGridDraggableLayout(gridId: ID!): [GridDraggableLayout]!
     getGrids(userId: ID!): [Grid]!
 }
 
 extend type Mutation {
-    changeGridLayout(grid_id: ID!, gridDraggableProps_id: ID!, newGridData: GridDataInput!): GridData!
-    updateGridName(grid_id: ID!, name: String!): Grid!
+    updateGridLayout(gridId: ID!, gridDraggablePropsId: ID!, newGridData: GridDataInput!): GridData!
+    updateGridName(gridId: ID!, name: String!): Grid!
     newGrid(name: String!, userId: ID!): Grid!
     deleteGrid(gridId: ID!): Boolean!
 }

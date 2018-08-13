@@ -1,5 +1,6 @@
-package com.web2team.graphql.model;
+package com.web2team.graphql.model.Chat;
 
+import com.web2team.graphql.model.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,15 +13,15 @@ public class Chat {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String username;
+  @ManyToOne private User user;
 
   private String contents;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdAt;
 
-  @Column(name = "chat_thread_id")
-  private Long chatThreadId;
+  @ManyToOne
+  private ChatThread chatThread;
 
   @PrePersist
   protected void onCreate() {

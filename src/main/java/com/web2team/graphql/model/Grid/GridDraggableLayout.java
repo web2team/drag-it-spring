@@ -15,9 +15,8 @@ public class GridDraggableLayout {
 
   @OneToOne @JoinColumn private GridData gridData;
 
-  @OneToOne @JoinColumn private GridComponentProps gridComponentProps;
-
   @Enumerated(EnumType.STRING)
   private GridComponentType gridComponentType;
-}
 
+  @OneToOne @JoinColumn private GridComponentProps gridComponentProps;
+}

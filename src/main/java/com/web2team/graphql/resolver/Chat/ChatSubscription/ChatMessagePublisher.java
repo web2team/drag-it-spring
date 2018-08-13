@@ -1,7 +1,7 @@
 package com.web2team.graphql.resolver.Chat.ChatSubscription;
 
 import com.web2team.graphql.event.RxBus;
-import com.web2team.graphql.model.Chat;
+import com.web2team.graphql.model.Chat.Chat;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ class ChatMessagePublisher {
     this.chatRxBus = chatRxBus;
   }
 
-  Flowable<Chat> getPublisher(Long chat_thread_id) {
+  Flowable<Chat> getPublisher(Long chatThreadId) {
     return chatRxBus
         .toObservable()
-        .filter(chat -> chat.getChatThreadId().equals(chat_thread_id))
+        .filter(chat -> chat.getChatThread().getId().equals(chatThreadId))
         .toFlowable(BackpressureStrategy.BUFFER);
   }
 }

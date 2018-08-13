@@ -1,4 +1,4 @@
-package com.web2team.graphql.model.Grid;
+package com.web2team.graphql.model.Chat;
 
 import lombok.Data;
 
@@ -9,10 +9,10 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-public class GridComponentProps {
+public class ChatThread {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Long chatThreadId;
+  private String name;
 }

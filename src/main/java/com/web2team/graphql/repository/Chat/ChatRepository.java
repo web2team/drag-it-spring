@@ -1,6 +1,6 @@
-package com.web2team.graphql.repository;
+package com.web2team.graphql.repository.Chat;
 
-import com.web2team.graphql.model.Chat;
+import com.web2team.graphql.model.Chat.Chat;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;

@@ -1,4 +1,4 @@
-package com.web2team.graphql.repository;
+package com.web2team.graphql.repository.User;
 
 import com.web2team.graphql.model.User;
 import org.springframework.data.repository.CrudRepository;
@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
-  Optional<User> findUserByEmailEqualsAndPassword(String Email, String password);
+  Optional<User> findUserByEmailEqualsAndPassword(String email, String password);
 
-  Optional<User> findUserByEmailEquals(String Email);
+  Optional<User> findUserByEmailEquals(String email);
 }
