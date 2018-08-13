@@ -9,11 +9,13 @@ type Chat {
 type ChatThread {
     id: ID!
     name: String!
+    users: [User]!
 }
 
 extend type Query {
     getAllChatMessages(chatThreadId: ID!): [Chat]!
     getChatMessages(chatThreadId: ID!, page: Int!, size: Int!): [Chat]!
+    getChatThread(chatThreadId: ID!): ChatThread!
 }
 
 extend type Mutation {
