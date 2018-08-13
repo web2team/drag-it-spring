@@ -7,6 +7,11 @@ type GridComponentProps {
     chat_thread_id: ID
 }
 
+type Grid {
+    id: ID!
+    name: String
+}
+
 type GridData {
     key: ID!
 
@@ -53,8 +58,12 @@ type GridDraggableProps {
 
 extend type Query {
     getGridDraggableProps(grid_id: ID!): [GridDraggableProps]!
+    getGrids(userId: ID!): [Grid]!
 }
 
 extend type Mutation {
     changeGridLayout(grid_id: ID!, gridDraggableProps_id: ID!, newGridData: GridDataInput!): GridData!
+    updateGridName(grid_id: ID!, name: String!): Grid!
+    newGrid(name: String!, userId: ID!): Grid!
+    deleteGrid(gridId: ID!): Boolean!
 }

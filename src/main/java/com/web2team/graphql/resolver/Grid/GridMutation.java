@@ -1,29 +1,74 @@
 package com.web2team.graphql.resolver.Grid;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.web2team.graphql.model.Grid.Grid;
 import com.web2team.graphql.model.Grid.GridData;
+import com.web2team.graphql.model.User;
 import com.web2team.graphql.repository.Grid.GridDataRepository;
 import com.web2team.graphql.repository.Grid.GridDraggableLayoutRepository;
+import com.web2team.graphql.repository.Grid.GridRepository;
+import com.web2team.graphql.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.util.NoSuchElementException;
 
 @Component
 @AllArgsConstructor
 public class GridMutation implements GraphQLMutationResolver {
-  private GridDraggableLayoutRepository gridRepository;
+  private GridDraggableLayoutRepository gridDraggableLayoutRepository;
   private GridDataRepository gridDataRepository;
+  private GridRepository gridRepository;
+  private UserRepository userRepository;
 
   public GridData changeGridLayout(Long grid_id, Long gridDraggableProps_id, GridData newGridData)
       throws InstantiationException, IllegalAccessException {
 
     GridData origin =
-        gridRepository.findByGridIdEqualsAndIdEquals(grid_id, gridDraggableProps_id).getGridData();
+        gridDraggableLayoutRepository
+            .findByGridIdEqualsAndIdEquals(grid_id, gridDraggableProps_id)
+            .getGridData();
 
     GridData toSave = mergeObjects(origin, newGridData);
 
     return gridDataRepository.save(toSave);
+  }
+
+  public Grid updateGridName(Long grid_id, String name) {
+    Grid target =
+        gridRepository
+            .findById(grid_id)
+            .orElseThrow(() -> new NoSuchElementException("invalid grid id"));
+
+    target.setName(name);
+
+    return gridRepository.save(target);
+  }
+
+  public Grid newGrid(String name, Long userId) {
+    Grid grid = new Grid();
+
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new NoSuchElementException("invalid user id"));
+
+    grid.setName(name);
+    grid.setUser(user);
+
+    return gridRepository.save(grid);
+  }
+
+  public Boolean deleteGrid(Long gridId) {
+
+    Grid grid =
+        gridRepository
+            .findById(gridId)
+            .orElseThrow(() -> new NoSuchElementException("invalid grid id"));
+    gridRepository.delete(grid);
+
+    return true;
   }
 
   @SuppressWarnings("unchecked")
