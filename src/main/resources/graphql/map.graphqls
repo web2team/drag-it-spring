@@ -1,0 +1,15 @@
+type MapUserChatThread {
+    userId: ID!
+    chatThreadId: ID!
+    name: String!
+}
+
+
+extend type Query {
+    getMapUserChatThread(userId: ID!, chatThreadId: ID!): MapUserChatThread!
+}
+
+extend type Mutation {
+    addUserToChatThread(userId: ID!, chatThreadId: ID!): MapUserChatThread!
+    updateUserChatThreadName(userId: ID!, chatThreadId: ID!, name: String!): MapUserChatThread!
+}

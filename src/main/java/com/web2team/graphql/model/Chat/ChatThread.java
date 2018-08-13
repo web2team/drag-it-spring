@@ -13,8 +13,6 @@ public class ChatThread {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
-
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "map_user_chat_thread",

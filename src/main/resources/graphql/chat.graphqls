@@ -8,7 +8,6 @@ type Chat {
 
 type ChatThread {
     id: ID!
-    name: String!
     users: [User]!
 }
 
@@ -20,6 +19,7 @@ extend type Query {
 
 extend type Mutation {
     newChatMessage(chatThreadId: ID!, userId: ID!, contents: String!): Chat!
+    newChatThread(userId: ID!, threadName: String): MapUserChatThread!
 }
 
 extend type Subscription {

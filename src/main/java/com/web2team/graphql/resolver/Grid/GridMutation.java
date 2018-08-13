@@ -22,12 +22,14 @@ public class GridMutation implements GraphQLMutationResolver {
   private GridRepository gridRepository;
   private UserRepository userRepository;
 
-  public GridData updateGridLayout(Long gridId, Long gridDraggablePropsId, GridData newGridData)
+  public GridData updateGridLayout(Long gridId, Long gridDraggableLayoutId, GridData newGridData)
       throws InstantiationException, IllegalAccessException {
 
     GridData origin =
         gridDraggableLayoutRepository
-            .findByGridIdEqualsAndIdEquals(gridId, gridDraggablePropsId)
+            .findByGridIdEqualsAndIdEquals(gridId, gridDraggableLayoutId)
+            .orElseThrow(
+                () -> new NoSuchElementException("invalid gridId and gridDraggableLayoutId"))
             .getGridData();
 
     GridData toSave = mergeObjects(origin, newGridData);
@@ -39,7 +41,7 @@ public class GridMutation implements GraphQLMutationResolver {
     Grid target =
         gridRepository
             .findById(gridId)
-            .orElseThrow(() -> new NoSuchElementException("invalid grid id"));
+            .orElseThrow(() -> new NoSuchElementException("invalid gridId"));
 
     target.setName(name);
 
@@ -52,7 +54,7 @@ public class GridMutation implements GraphQLMutationResolver {
     User user =
         userRepository
             .findById(userId)
-            .orElseThrow(() -> new NoSuchElementException("invalid user id"));
+            .orElseThrow(() -> new NoSuchElementException("invalid userId"));
 
     grid.setName(name);
     grid.setUser(user);
@@ -65,7 +67,7 @@ public class GridMutation implements GraphQLMutationResolver {
     Grid grid =
         gridRepository
             .findById(gridId)
-            .orElseThrow(() -> new NoSuchElementException("invalid grid id"));
+            .orElseThrow(() -> new NoSuchElementException("invalid gridId"));
     gridRepository.delete(grid);
 
     return true;
