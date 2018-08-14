@@ -4,6 +4,8 @@ import com.web2team.graphql.model.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -20,8 +22,11 @@ public class Chat {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdAt;
 
-  @ManyToOne
-  private ChatThread chatThread;
+  public LocalDateTime getCreatedAt() {
+    return this.createdAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+  }
+
+  @ManyToOne private ChatThread chatThread;
 
   @PrePersist
   protected void onCreate() {
