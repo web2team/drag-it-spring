@@ -6,16 +6,16 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class GridData {
+public class GridLayoutItemPosition {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Long key;
 
-  private Integer x;
-  private Integer y;
-  private Integer w;
-  private Integer h;
+  private Integer x = 0;
+  private Integer y = 0;
+  private Integer w = 8;
+  private Integer h = 10;
 
   private Integer maxH;
   private Integer maxW;

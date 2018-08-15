@@ -1,6 +1,6 @@
 package com.web2team.graphql.event;
 
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

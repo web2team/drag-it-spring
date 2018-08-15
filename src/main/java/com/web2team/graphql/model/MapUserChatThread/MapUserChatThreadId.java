@@ -1,4 +1,4 @@
-package com.web2team.graphql.model.Map;
+package com.web2team.graphql.model.MapUserChatThread;
 
 import lombok.Data;
 

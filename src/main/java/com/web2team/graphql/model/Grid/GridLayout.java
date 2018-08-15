@@ -1,20 +1,21 @@
 package com.web2team.graphql.model.Grid;
 
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.User.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
-public class Grid {
+public class GridLayout {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
 
-  @ManyToOne
-  @JoinColumn
-  private User user;
+  @OneToMany private List<GridLayoutItem> gridLayoutItems;
+
+  @ManyToOne private User user;
 }

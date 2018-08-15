@@ -1,0 +1,73 @@
+type GridLayout {
+    id: ID!
+    name: String
+    user: User!
+    gridLayoutItems: [GridLayoutItem]
+}
+
+type GridLayoutItem {
+    id: ID!
+    gridLayout: GridLayout!
+    gridLayoutItemType: GridLayoutItemType!
+    gridLayoutItemProps: GridLayoutItemProps!
+    gridLayoutItemPosition: GridLayoutItemPosition!
+}
+
+enum GridLayoutItemType {
+    CHATTING
+}
+
+type GridLayoutItemProps {
+    id: ID!
+    chatThreadId: ID
+}
+
+type GridLayoutItemPosition {
+    key: ID!
+
+    x: Int!
+    y: Int!
+    w: Int!
+    h: Int!
+
+    maxH: Int
+    maxW: Int
+    minH: Int
+    minW: Int
+
+    isDraggable: Boolean
+    isResizable: Boolean
+    isStatic: Boolean
+    draggableHandle: String
+}
+
+input GridLayoutItemPositionInput {
+    x: Int
+    y: Int
+    w: Int
+    h: Int
+
+    maxH: Int
+    maxW: Int
+    minH: Int
+    minW: Int
+
+    isDraggable: Boolean
+    isResizable: Boolean
+    isStatic: Boolean
+    draggableHandle: String
+}
+
+extend type Query {
+    getGridLayoutItems(gridLayoutId: ID!): [GridLayoutItem]!
+    getGridLayouts(userId: ID!): [GridLayout]!
+}
+
+extend type Mutation {
+    newGridLayout(name: String!, userId: ID!): GridLayout!
+
+    updateGridLayout(gridLayoutId: ID!, gridLayoutItemId: ID!, gridLayoutItemPosition: GridLayoutItemPositionInput!): GridLayoutItemPosition!
+    updateGridLayoutName(gridLayoutId: ID!, name: String!): GridLayout!
+
+    deleteGridLayout(gridLayoutId: ID!): Boolean!
+}

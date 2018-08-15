@@ -1,7 +1,7 @@
 package com.web2team.restful.controller;
 
 import com.web2team.graphql.event.RxBus;
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.User.UserRepository;
 import com.web2team.restful.model.LoginRequestBody;
 import com.web2team.restful.model.LoginResponseData;

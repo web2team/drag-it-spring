@@ -19,7 +19,7 @@ extend type Query {
 
 extend type Mutation {
     newChatMessage(chatThreadId: ID!, userId: ID!, contents: String!): Chat!
-    newChatThread(userId: ID!, threadName: String): MapUserChatThread!
+    newChatThread(gridId:ID!, users: [UserInput]!, threadName: String): ChatThread!
 }
 
 extend type Subscription {

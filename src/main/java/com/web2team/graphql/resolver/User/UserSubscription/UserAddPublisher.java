@@ -1,7 +1,7 @@
 package com.web2team.graphql.resolver.User.UserSubscription;
 
 import com.web2team.graphql.event.RxBus;
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.User.User;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import org.springframework.beans.factory.annotation.Autowired;

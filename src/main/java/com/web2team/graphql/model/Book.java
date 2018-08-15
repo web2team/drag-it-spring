@@ -1,5 +1,7 @@
 package com.web2team.graphql.model;
 
+import com.web2team.graphql.model.User.User;
+
 import javax.persistence.*;
 
 @Entity

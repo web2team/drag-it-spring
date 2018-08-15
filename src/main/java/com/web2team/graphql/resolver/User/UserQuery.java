@@ -2,7 +2,7 @@ package com.web2team.graphql.resolver.User;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.web2team.graphql.exception.UserNotFoundException;
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.User.UserRepository;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.AllArgsConstructor;

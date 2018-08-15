@@ -1,6 +1,6 @@
 package com.web2team.graphql.repository.User;
 
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.User.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

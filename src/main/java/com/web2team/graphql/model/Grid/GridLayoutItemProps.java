@@ -9,7 +9,7 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-public class GridComponentProps {
+public class GridLayoutItemProps {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

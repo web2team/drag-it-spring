@@ -1,8 +1,8 @@
-package com.web2team.graphql.resolver.Map;
+package com.web2team.graphql.resolver.MapUserChatThread;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import com.web2team.graphql.model.Map.MapUserChatThread;
-import com.web2team.graphql.repository.Mapping.MapUserChatThreadRepository;
+import com.web2team.graphql.model.MapUserChatThread.MapUserChatThread;
+import com.web2team.graphql.repository.MapUserChatThread.MapUserChatThreadRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

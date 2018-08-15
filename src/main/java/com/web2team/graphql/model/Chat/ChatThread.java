@@ -1,6 +1,6 @@
 package com.web2team.graphql.model.Chat;
 
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.User.User;
 import lombok.Data;
 
 import javax.persistence.*;

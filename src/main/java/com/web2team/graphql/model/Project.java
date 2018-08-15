@@ -1,4 +1,4 @@
-package com.web2team.graphql.model.Chat;
+package com.web2team.graphql.model;
 
 import com.web2team.graphql.model.User.User;
 import lombok.Data;
@@ -6,21 +6,25 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Entity
 @Data
-public class Chat {
+public class Project {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne private User user;
-
-  private String contents;
+  private String name;
 
   private LocalDateTime createdAt;
 
-  @ManyToOne private ChatThread chatThread;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "map_user_project",
+      joinColumns = @JoinColumn(name = "project_id"),
+      inverseJoinColumns = @JoinColumn(name = "user_id"))
+  private List<User> users;
 
   @PrePersist
   protected void onCreate() {

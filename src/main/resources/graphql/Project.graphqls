@@ -1,0 +1,14 @@
+type Project {
+    id: ID!
+    name: String!
+    users: [User]!
+    createdAt: String!
+}
+
+extend type Query {
+    getProject(projectId: ID!): Project!
+}
+
+extend type Mutation {
+
+}

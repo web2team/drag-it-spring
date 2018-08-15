@@ -4,17 +4,23 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.web2team.graphql.event.RxBus;
 import com.web2team.graphql.model.Chat.Chat;
 import com.web2team.graphql.model.Chat.ChatThread;
-import com.web2team.graphql.model.Map.MapUserChatThread;
-import com.web2team.graphql.model.User;
+import com.web2team.graphql.model.Grid.*;
+import com.web2team.graphql.model.MapUserChatThread.MapUserChatThread;
+import com.web2team.graphql.model.User.User;
+import com.web2team.graphql.model.User.UserInput;
 import com.web2team.graphql.repository.Chat.ChatRepository;
 import com.web2team.graphql.repository.Chat.ChatThreadRepository;
-import com.web2team.graphql.repository.Mapping.MapUserChatThreadRepository;
+import com.web2team.graphql.repository.GridLayout.GridLayoutItemPropsRepository;
+import com.web2team.graphql.repository.GridLayout.GridLayoutItemPositionRepository;
+import com.web2team.graphql.repository.GridLayout.GridLayoutItemRepository;
+import com.web2team.graphql.repository.GridLayout.GridLayoutRepository;
+import com.web2team.graphql.repository.MapUserChatThread.MapUserChatThreadRepository;
 import com.web2team.graphql.repository.User.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Component
@@ -24,6 +30,10 @@ public class ChatMutation implements GraphQLMutationResolver {
   private ChatThreadRepository chatThreadRepository;
   private UserRepository userRepository;
   private MapUserChatThreadRepository mapUserChatThreadRepository;
+  private GridLayoutItemRepository gridLayoutItemRepository;
+  private GridLayoutRepository gridLayoutRepository;
+  private GridLayoutItemPositionRepository gridLayoutItemPositionRepository;
+  private GridLayoutItemPropsRepository gridLayoutItemPropsRepository;
 
   private RxBus<Chat> chatRxBus;
 
@@ -48,18 +58,40 @@ public class ChatMutation implements GraphQLMutationResolver {
     return savedChatMessage;
   }
 
-  public MapUserChatThread newChatThread(Long userId, @Nullable String threadName) {
+  public ChatThread newChatThread(Long gridId, List<UserInput> users, @Nullable String threadName) {
     ChatThread chatThread = new ChatThread();
     ChatThread savedChatThread = chatThreadRepository.save(chatThread);
-    MapUserChatThread mapUserChatThread = new MapUserChatThread();
+    Long threadId = savedChatThread.getId();
 
-    mapUserChatThread.setChatThreadId(savedChatThread.getId());
-    mapUserChatThread.setUserId(userId);
+    for (UserInput userInput : users) {
+      MapUserChatThread mapUserChatThread = new MapUserChatThread();
+      mapUserChatThread.setChatThreadId(threadId);
+      mapUserChatThread.setUserId(userInput.getId());
+      if (threadName != null) {
+        mapUserChatThread.setName(threadName);
+      }
 
-    if (threadName != null) {
-      mapUserChatThread.setName(threadName);
+      mapUserChatThreadRepository.save(mapUserChatThread);
     }
 
-    return mapUserChatThreadRepository.save(mapUserChatThread);
+    GridLayoutItemPosition gridLayoutItemPosition = new GridLayoutItemPosition();
+    GridLayoutItemProps gridLayoutItemProps = new GridLayoutItemProps();
+    gridLayoutItemProps.setChatThreadId(threadId);
+    GridLayout gridLayout =
+        gridLayoutRepository
+            .findById(gridId)
+            .orElseThrow(() -> new NoSuchElementException("invalid gridId"));
+
+    GridLayoutItem gridLayoutItem = new GridLayoutItem();
+    gridLayoutItem.setGridLayoutItemPosition(gridLayoutItemPositionRepository.save(gridLayoutItemPosition));
+    gridLayoutItem.setGridLayoutItemProps(
+        gridLayoutItemPropsRepository.save(gridLayoutItemProps));
+    gridLayoutItem.setGridLayoutItemType(GridLayoutItemType.CHATTING);
+    gridLayoutItem.setGridLayout(gridLayoutRepository.save(gridLayout));
+    gridLayoutItemRepository.save(gridLayoutItem);
+
+    return chatThreadRepository
+        .findById(threadId)
+        .orElseThrow(() -> new RuntimeException("error on creating newChatThread"));
   }
 }
