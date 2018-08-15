@@ -10,6 +10,10 @@ type ChatThread {
     id: ID!
     users: [User]!
 }
+input ChatThreadInput {
+    threadName: String
+    users: [UserInput]!
+}
 
 extend type Query {
     getAllChatMessages(chatThreadId: ID!): [Chat]!
@@ -19,7 +23,7 @@ extend type Query {
 
 extend type Mutation {
     newChatMessage(chatThreadId: ID!, userId: ID!, contents: String!): Chat!
-    newChatThread(gridId:ID!, users: [UserInput]!, threadName: String): ChatThread!
+#    newChatThread(gridLayoutId:ID!, users: [UserInput]!, threadName: String): ChatThread!
 }
 
 extend type Subscription {

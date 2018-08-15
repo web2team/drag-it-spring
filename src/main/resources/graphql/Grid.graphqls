@@ -19,7 +19,10 @@ enum GridLayoutItemType {
 
 type GridLayoutItemProps {
     id: ID!
-    chatThreadId: ID
+    chatThread: ChatThread
+}
+input GridLayoutItemPropsInput {
+    chatThreadInput: ChatThreadInput
 }
 
 type GridLayoutItemPosition {
@@ -65,9 +68,11 @@ extend type Query {
 
 extend type Mutation {
     newGridLayout(name: String!, userId: ID!): GridLayout!
+    newGridLayoutItem(gridLayoutId: ID!, gridLayoutItemType: GridLayoutItemType!, gridLayoutItemPropsInput: GridLayoutItemPropsInput!): GridLayoutItem!
 
     updateGridLayout(gridLayoutId: ID!, gridLayoutItemId: ID!, gridLayoutItemPosition: GridLayoutItemPositionInput!): GridLayoutItemPosition!
     updateGridLayoutName(gridLayoutId: ID!, name: String!): GridLayout!
 
     deleteGridLayout(gridLayoutId: ID!): Boolean!
+    deleteGridLayoutItem(gridLayoutItemId: ID!): Boolean!
 }

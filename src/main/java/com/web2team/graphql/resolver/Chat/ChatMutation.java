@@ -58,40 +58,40 @@ public class ChatMutation implements GraphQLMutationResolver {
     return savedChatMessage;
   }
 
-  public ChatThread newChatThread(Long gridId, List<UserInput> users, @Nullable String threadName) {
-    ChatThread chatThread = new ChatThread();
-    ChatThread savedChatThread = chatThreadRepository.save(chatThread);
-    Long threadId = savedChatThread.getId();
-
-    for (UserInput userInput : users) {
-      MapUserChatThread mapUserChatThread = new MapUserChatThread();
-      mapUserChatThread.setChatThreadId(threadId);
-      mapUserChatThread.setUserId(userInput.getId());
-      if (threadName != null) {
-        mapUserChatThread.setName(threadName);
-      }
-
-      mapUserChatThreadRepository.save(mapUserChatThread);
-    }
-
-    GridLayoutItemPosition gridLayoutItemPosition = new GridLayoutItemPosition();
-    GridLayoutItemProps gridLayoutItemProps = new GridLayoutItemProps();
-    gridLayoutItemProps.setChatThreadId(threadId);
-    GridLayout gridLayout =
-        gridLayoutRepository
-            .findById(gridId)
-            .orElseThrow(() -> new NoSuchElementException("invalid gridId"));
-
-    GridLayoutItem gridLayoutItem = new GridLayoutItem();
-    gridLayoutItem.setGridLayoutItemPosition(gridLayoutItemPositionRepository.save(gridLayoutItemPosition));
-    gridLayoutItem.setGridLayoutItemProps(
-        gridLayoutItemPropsRepository.save(gridLayoutItemProps));
-    gridLayoutItem.setGridLayoutItemType(GridLayoutItemType.CHATTING);
-    gridLayoutItem.setGridLayout(gridLayoutRepository.save(gridLayout));
-    gridLayoutItemRepository.save(gridLayoutItem);
-
-    return chatThreadRepository
-        .findById(threadId)
-        .orElseThrow(() -> new RuntimeException("error on creating newChatThread"));
-  }
+//  public ChatThread newChatThread(Long gridLayoutId, List<UserInput> users, @Nullable String threadName) {
+//    ChatThread chatThread = new ChatThread();
+//    ChatThread savedChatThread = chatThreadRepository.save(chatThread);
+//    Long threadId = savedChatThread.getId();
+//
+//    for (UserInput userInput : users) {
+//      MapUserChatThread mapUserChatThread = new MapUserChatThread();
+//      mapUserChatThread.setChatThreadId(threadId);
+//      mapUserChatThread.setUserId(userInput.getId());
+//      if (threadName != null) {
+//        mapUserChatThread.setName(threadName);
+//      }
+//
+//      mapUserChatThreadRepository.save(mapUserChatThread);
+//    }
+//
+//    GridLayoutItemPosition gridLayoutItemPosition = new GridLayoutItemPosition();
+//    GridLayoutItemProps gridLayoutItemProps = new GridLayoutItemProps();
+//    gridLayoutItemProps.setChatThreadId(threadId);
+//    GridLayout gridLayout =
+//        gridLayoutRepository
+//            .findById(gridLayoutId)
+//            .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId"));
+//
+//    GridLayoutItem gridLayoutItem = new GridLayoutItem();
+//    gridLayoutItem.setGridLayoutItemPosition(gridLayoutItemPositionRepository.save(gridLayoutItemPosition));
+//    gridLayoutItem.setGridLayoutItemProps(
+//        gridLayoutItemPropsRepository.save(gridLayoutItemProps));
+//    gridLayoutItem.setGridLayoutItemType(GridLayoutItemType.CHATTING);
+//    gridLayoutItem.setGridLayout(gridLayoutRepository.save(gridLayout));
+//    gridLayoutItemRepository.save(gridLayoutItem);
+//
+//    return chatThreadRepository
+//        .findById(threadId)
+//        .orElseThrow(() -> new RuntimeException("error on creating newChatThread"));
+//  }
 }

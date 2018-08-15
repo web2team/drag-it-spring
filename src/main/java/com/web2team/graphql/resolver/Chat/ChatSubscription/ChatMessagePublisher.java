@@ -4,17 +4,13 @@ import com.web2team.graphql.event.RxBus;
 import com.web2team.graphql.model.Chat.Chat;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 class ChatMessagePublisher {
   private final RxBus<Chat> chatRxBus;
-
-  @Autowired
-  public ChatMessagePublisher(RxBus<Chat> chatRxBus) {
-    this.chatRxBus = chatRxBus;
-  }
 
   Flowable<Chat> getPublisher(Long chatThreadId) {
     return chatRxBus

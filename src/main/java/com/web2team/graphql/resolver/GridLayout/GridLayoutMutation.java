@@ -1,12 +1,14 @@
 package com.web2team.graphql.resolver.GridLayout;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import com.web2team.graphql.model.Grid.GridLayout;
-import com.web2team.graphql.model.Grid.GridLayoutItemPosition;
+import com.web2team.graphql.event.RxBus;
+import com.web2team.graphql.model.Grid.*;
 import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPositionRepository;
+import com.web2team.graphql.repository.GridLayout.GridLayoutItemPropsRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutRepository;
+import com.web2team.graphql.repository.GridLayout.utility.GridLayoutItemPropsUtility;
 import com.web2team.graphql.repository.User.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,9 +21,13 @@ import java.util.NoSuchElementException;
 public class GridLayoutMutation implements GraphQLMutationResolver {
   private GridLayoutRepository gridLayoutRepository;
   private GridLayoutItemRepository gridLayoutItemRepository;
+  private GridLayoutItemPropsRepository gridLayoutItemPropsRepository;
   private GridLayoutItemPositionRepository gridLayoutItemPositionRepository;
 
   private UserRepository userRepository;
+
+  private GridLayoutItemPropsUtility gridLayoutItemPropsUtility;
+  private RxBus<GridLayoutItem> gridLayoutItemRxBus;
 
   public GridLayoutItemPosition updateGridLayout(
       Long gridLayoutId, Long gridLayoutItemId, GridLayoutItemPosition newGridLayoutItemPosition)
@@ -39,11 +45,11 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
     return gridLayoutItemPositionRepository.save(toSave);
   }
 
-  public GridLayout updateGridLayoutName(Long gridId, String name) {
+  public GridLayout updateGridLayoutName(Long gridLayoutId, String name) {
     GridLayout target =
         gridLayoutRepository
-            .findById(gridId)
-            .orElseThrow(() -> new NoSuchElementException("invalid gridId"));
+            .findById(gridLayoutId)
+            .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId"));
 
     target.setName(name);
 
@@ -64,13 +70,47 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
     return gridLayoutRepository.save(gridLayout);
   }
 
-  public Boolean deleteGridLayout(Long gridId) {
+  public GridLayoutItem newGridLayoutItem(
+      Long gridLayoutId,
+      GridLayoutItemType gridLayoutItemType,
+      GridLayoutItemPropsInput gridLayoutItemPropsInput) {
+
+    GridLayoutItem gridLayoutItem = new GridLayoutItem();
+
+    gridLayoutItem.setGridLayout(
+        gridLayoutRepository
+            .findById(gridLayoutId)
+            .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId")));
+
+    gridLayoutItem.setGridLayoutItemType(gridLayoutItemType);
+
+    gridLayoutItem.setGridLayoutItemProps(
+        gridLayoutItemPropsRepository.save(
+            gridLayoutItemPropsUtility.generateGridLayoutItemProps(
+                gridLayoutItemType, gridLayoutItemPropsInput)));
+
+    gridLayoutItem.setGridLayoutItemPosition(
+        gridLayoutItemPositionRepository.save(new GridLayoutItemPosition()));
+
+    GridLayoutItem savedGridLayoutItem = gridLayoutItemRepository.save(gridLayoutItem);
+
+    gridLayoutItemRxBus.send(savedGridLayoutItem);
+    return savedGridLayoutItem;
+  }
+
+  public Boolean deleteGridLayout(Long gridLayoutId) {
 
     GridLayout gridLayout =
         gridLayoutRepository
-            .findById(gridId)
-            .orElseThrow(() -> new NoSuchElementException("invalid gridId"));
+            .findById(gridLayoutId)
+            .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId"));
     gridLayoutRepository.delete(gridLayout);
+
+    return true;
+  }
+
+  public Boolean deleteGridLayoutItem(Long gridLayoutItemId) {
+    gridLayoutItemRepository.deleteById(gridLayoutItemId);
 
     return true;
   }
