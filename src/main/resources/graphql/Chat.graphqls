@@ -23,7 +23,8 @@ extend type Query {
 
 extend type Mutation {
     newChatMessage(chatThreadId: ID!, userId: ID!, contents: String!): Chat!
-#    newChatThread(gridLayoutId:ID!, users: [UserInput]!, threadName: String): ChatThread!
+
+    addUserToChatThread(userId: ID!, chatThreadId: ID!): ChatThread!
 }
 
 extend type Subscription {

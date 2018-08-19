@@ -95,6 +95,7 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
     GridLayoutItem savedGridLayoutItem = gridLayoutItemRepository.save(gridLayoutItem);
 
     gridLayoutItemRxBus.send(savedGridLayoutItem);
+
     return savedGridLayoutItem;
   }
 

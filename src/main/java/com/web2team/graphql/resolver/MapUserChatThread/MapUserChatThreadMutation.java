@@ -13,14 +13,14 @@ import java.util.NoSuchElementException;
 public class MapUserChatThreadMutation implements GraphQLMutationResolver {
   private MapUserChatThreadRepository mapUserChatThreadRepository;
 
-  public MapUserChatThread addUserToChatThread(Long userId, Long chatThreadId) {
-    MapUserChatThread mapUserChatThread = new MapUserChatThread();
-
-    mapUserChatThread.setUserId(userId);
-    mapUserChatThread.setChatThreadId(chatThreadId);
-
-    return mapUserChatThreadRepository.save(mapUserChatThread);
-  }
+//  public MapUserChatThread addUserToChatThread(Long userId, Long chatThreadId) {
+//    MapUserChatThread mapUserChatThread = new MapUserChatThread();
+//
+//    mapUserChatThread.setUserId(userId);
+//    mapUserChatThread.setChatThreadId(chatThreadId);
+//
+//    return mapUserChatThreadRepository.save(mapUserChatThread);
+//  }
 
   public MapUserChatThread updateUserChatThreadName(Long userId, Long chatThreadId, String name) {
     MapUserChatThread mapUserChatThread =
@@ -29,7 +29,6 @@ public class MapUserChatThreadMutation implements GraphQLMutationResolver {
             .orElseThrow(() -> new NoSuchElementException("invalid userId, chatThreadId"));
 
     mapUserChatThread.setName(name);
-
 
     return mapUserChatThreadRepository.save(mapUserChatThread);
   }

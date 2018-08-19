@@ -20,6 +20,5 @@ public class MapUserChatThread implements Serializable {
   @Column(name = "chat_thread_id")
   private Long chatThreadId;
 
-  @Column
-  private String name = "newChat";
+  @Column private String name = "newChat";
 }

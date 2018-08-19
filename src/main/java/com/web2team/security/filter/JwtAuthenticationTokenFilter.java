@@ -4,6 +4,7 @@ import com.web2team.security.exception.JwtTokenMissingException;
 import com.web2team.security.model.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import javax.servlet.FilterChain;
@@ -30,6 +31,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
   public Authentication attemptAuthentication(
       HttpServletRequest request, HttpServletResponse response) {
     String header = request.getHeader(this.tokenHeader);
+    System.out.println(header);
 
     if (header == null || !header.startsWith("Bearer ")) {
       throw new JwtTokenMissingException("No JWT token found in request headers");

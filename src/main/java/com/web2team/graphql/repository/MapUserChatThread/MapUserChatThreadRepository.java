@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface MapUserChatThreadRepository extends CrudRepository<MapUserChatThread, Long> {
   Optional<MapUserChatThread> findByUserIdEqualsAndChatThreadIdEquals(
-      Long userId, Long chatThreadId);
+      Long usersId, Long chatThreadId);
 }

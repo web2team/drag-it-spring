@@ -1,28 +1,14 @@
 package com.web2team.graphql.resolver.User;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.web2team.graphql.repository.Chat.ChatThreadRepository;
+import com.web2team.graphql.repository.User.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class UserMutation implements GraphQLMutationResolver {
-
-  //  private final UserRepository userRepository;
-  //
-  //  @Autowired
-  //  public UserMutation(UserRepository userRepository) {
-  //    this.userRepository = userRepository;
-  //  }
-  //
-  //  public User newUser(String user_id, String password, String name, String email) {
-  //    System.out.println(name);
-  //
-  //    User user = new User();
-  //    user.setEmail(email);
-  //    user.setName(name);
-  //    user.setPassword(password);
-  //
-  //    userRepository.save(user);
-  //
-  //    return user;
-  //  }
+  private UserRepository userRepository;
+  private ChatThreadRepository chatThreadRepository;
 }

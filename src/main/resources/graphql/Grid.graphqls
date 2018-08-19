@@ -76,3 +76,7 @@ extend type Mutation {
     deleteGridLayout(gridLayoutId: ID!): Boolean!
     deleteGridLayoutItem(gridLayoutItemId: ID!): Boolean!
 }
+
+extend type Subscription {
+    linkGridLayoutItem(gridLayoutId: ID!): GridLayoutItem!
+}

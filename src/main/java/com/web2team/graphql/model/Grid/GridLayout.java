@@ -2,6 +2,8 @@ package com.web2team.graphql.model.Grid;
 
 import com.web2team.graphql.model.User.User;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,7 +17,9 @@ public class GridLayout {
 
   private String name;
 
-  @OneToMany private List<GridLayoutItem> gridLayoutItems;
+  @OneToMany(mappedBy = "gridLayout")
+  @LazyCollection(LazyCollectionOption.FALSE)
+  private List<GridLayoutItem> gridLayoutItems;
 
   @ManyToOne private User user;
 }

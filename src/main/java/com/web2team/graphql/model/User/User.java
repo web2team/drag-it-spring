@@ -1,7 +1,10 @@
 package com.web2team.graphql.model.User;
 
+import com.web2team.graphql.model.Chat.ChatThread;
 import com.web2team.graphql.model.Grid.GridLayout;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,9 +31,13 @@ public class User {
 
   private LocalDateTime updatedAt;
 
-  @OneToMany
-  @JoinColumn
+  @OneToMany(mappedBy = "user")
+  @LazyCollection(LazyCollectionOption.FALSE)
   private List<GridLayout> gridLayouts;
+
+  @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+  @LazyCollection(LazyCollectionOption.FALSE)
+  private List<ChatThread> chatThreads;
 
   @PrePersist
   protected void onCreate() {
