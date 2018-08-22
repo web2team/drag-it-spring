@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class GridLayoutItemProps {
+public class GridLayoutItemProps extends GridLayoutItemPropsInput {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

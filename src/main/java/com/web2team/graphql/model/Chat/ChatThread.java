@@ -10,12 +10,12 @@ import java.util.List;
 
 @Entity
 @Data
-public class ChatThread {
+public class ChatThread extends ChatThreadInput {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.MERGE)
   @JoinTable(
       name = "map_user_chat_thread",
       joinColumns = @JoinColumn(name = "chat_thread_id"),

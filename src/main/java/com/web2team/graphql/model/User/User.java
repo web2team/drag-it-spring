@@ -13,14 +13,13 @@ import java.util.List;
 
 @Entity
 @Data
-public class User {
+public class User extends UserInput {
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String email;
-
   private String password;
 
   private String name;

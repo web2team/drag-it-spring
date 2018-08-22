@@ -3,6 +3,7 @@ package com.web2team.graphql.resolver.GridLayout;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.web2team.graphql.event.RxBus;
 import com.web2team.graphql.model.Grid.*;
+import com.web2team.graphql.model.Notification.NotificationInput;
 import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPositionRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPropsRepository;
@@ -10,10 +11,12 @@ import com.web2team.graphql.repository.GridLayout.GridLayoutItemRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutRepository;
 import com.web2team.graphql.repository.GridLayout.utility.GridLayoutItemPropsUtility;
 import com.web2team.graphql.repository.User.UserRepository;
+import com.web2team.graphql.resolver.Notification.NotificationMutation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Component
@@ -28,6 +31,8 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
 
   private GridLayoutItemPropsUtility gridLayoutItemPropsUtility;
   private RxBus<GridLayoutItem> gridLayoutItemRxBus;
+
+  private NotificationMutation notificationMutation;
 
   public GridLayoutItemPosition updateGridLayout(
       Long gridLayoutId, Long gridLayoutItemId, GridLayoutItemPosition newGridLayoutItemPosition)
@@ -77,17 +82,19 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
 
     GridLayoutItem gridLayoutItem = new GridLayoutItem();
 
-    gridLayoutItem.setGridLayout(
+    GridLayout toSetGridLayout =
         gridLayoutRepository
             .findById(gridLayoutId)
-            .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId")));
+            .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId"));
+    gridLayoutItem.setGridLayout(toSetGridLayout);
 
     gridLayoutItem.setGridLayoutItemType(gridLayoutItemType);
 
-    gridLayoutItem.setGridLayoutItemProps(
+    GridLayoutItemProps props =
         gridLayoutItemPropsRepository.save(
             gridLayoutItemPropsUtility.generateGridLayoutItemProps(
-                gridLayoutItemType, gridLayoutItemPropsInput)));
+                gridLayoutItemType, gridLayoutItemPropsInput));
+    gridLayoutItem.setGridLayoutItemProps(props);
 
     gridLayoutItem.setGridLayoutItemPosition(
         gridLayoutItemPositionRepository.save(new GridLayoutItemPosition()));
@@ -95,6 +102,18 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
     GridLayoutItem savedGridLayoutItem = gridLayoutItemRepository.save(gridLayoutItem);
 
     gridLayoutItemRxBus.send(savedGridLayoutItem);
+
+    List<User> users = gridLayoutItemPropsInput.getChatThreadInput().getUsers();
+
+    for (User user : users) {
+      NotificationInput input = new NotificationInput();
+      input.setTitle("새로운 초대 알림");
+      input.setMessage(toSetGridLayout.getUser().getName() + "님께서 새로운 채팅방에 초대하셨습니다");
+      input.setGridLayoutItemType(GridLayoutItemType.CHATTING);
+      input.setGridLayoutItemPropsInput(props);
+
+      notificationMutation.newNotification(user.getId(), input);
+    }
 
     return savedGridLayoutItem;
   }

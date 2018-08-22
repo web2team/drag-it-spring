@@ -31,7 +31,6 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
   public Authentication attemptAuthentication(
       HttpServletRequest request, HttpServletResponse response) {
     String header = request.getHeader(this.tokenHeader);
-    System.out.println(header);
 
     if (header == null || !header.startsWith("Bearer ")) {
       throw new JwtTokenMissingException("No JWT token found in request headers");

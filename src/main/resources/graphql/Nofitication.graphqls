@@ -1,0 +1,34 @@
+type Notification {
+    id: ID!
+    title: String!
+    message: String!
+    isRead: Boolean!
+    createdAt: String!
+
+    user: User!
+
+    gridLayoutItemType: GridLayoutItemType
+    gridLayoutItemProps: GridLayoutItemProps
+}
+
+input NotificationInput {
+    title: String!
+    message: String!
+
+    gridLayoutItemType: GridLayoutItemType
+    gridLayoutItemPropsInput: GridLayoutItemPropsInput
+}
+
+extend type Query {
+    getNotifications(userId: ID!, page: Int!, size: Int!): [Notification]!
+}
+
+extend type Mutation {
+    newNotification(userId: ID!, notificationInput: NotificationInput): Notification!
+#   setReadNotification(....list or one)
+#   setUnReadNotificatoin (...list or one)
+}
+
+extend type Subscription {
+    linkNotification(userId: ID!): Notification!
+}
