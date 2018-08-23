@@ -5,14 +5,15 @@ import com.web2team.graphql.model.Grid.GridLayoutItemProps;
 import com.web2team.graphql.model.Grid.GridLayoutItemPropsInput;
 import com.web2team.graphql.model.Grid.GridLayoutItemType;
 import com.web2team.graphql.repository.Chat.ChatThreadRepository;
+import com.web2team.graphql.repository.MapUserChatThread.MapUserChatThreadRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
 public class GridLayoutItemPropsUtility {
-
   private ChatThreadRepository chatThreadRepository;
+  private MapUserChatThreadRepository mapUserChatThreadRepository;
 
   public GridLayoutItemProps generateGridLayoutItemProps(
       GridLayoutItemPropsInput gridLayoutItemPropsInput) {
@@ -24,8 +25,8 @@ public class GridLayoutItemPropsUtility {
     if (type.equals(GridLayoutItemType.CHATTING)) {
       ChatThread chatThread = new ChatThread();
       chatThread.setUsers(gridLayoutItemPropsInput.getChatThreadInput().getUsers());
-      ChatThread savedChatThread = chatThreadRepository.save(chatThread);
 
+      ChatThread savedChatThread = chatThreadRepository.save(chatThread);
       gridLayoutItemProps.setChatThread(savedChatThread);
 
       return gridLayoutItemProps;

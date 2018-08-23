@@ -1,14 +1,16 @@
 package com.web2team.graphql.resolver.GridLayout;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import com.web2team.graphql.event.RxBus;
+import com.web2team.graphql.model.Chat.ChatThread;
 import com.web2team.graphql.model.Grid.*;
+import com.web2team.graphql.model.MapUserChatThread.MapUserChatThread;
 import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPositionRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPropsRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutRepository;
 import com.web2team.graphql.repository.GridLayout.utility.GridLayoutItemPropsUtility;
+import com.web2team.graphql.repository.MapUserChatThread.MapUserChatThreadRepository;
 import com.web2team.graphql.repository.User.UserRepository;
 import com.web2team.graphql.resolver.Notification.NotificationHelper;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -25,13 +28,11 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
   private GridLayoutItemRepository GLItemRepo;
   private GridLayoutItemPropsRepository GLItemPropsRepo;
   private GridLayoutItemPositionRepository GLItemPositionRepo;
-
   private UserRepository userRepo;
-
   private GridLayoutItemPropsUtility GLItemPropsUtil;
-  private RxBus<GridLayoutItem> GLItemRxBus;
-
   private NotificationHelper notificationHelper;
+  private GridLayoutItemHelper GLItemHelper;
+  private MapUserChatThreadRepository mapUserChatThreadRepository;
 
   public GridLayoutItemPosition updateGridLayout(
       Long gridLayoutId, Long gridLayoutItemId, GridLayoutItemPosition newGridLayoutItemPosition)
@@ -70,27 +71,33 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
     return GLRepo.save(gridLayout);
   }
 
-  public GridLayoutItem newGridLayoutItem(Long gridLayoutId, GridLayoutItemPropsInput propsInput) {
-    GridLayoutItem newGLItem = new GridLayoutItem();
-
-    GridLayout toSetGridLayout = GLRepo.findById(gridLayoutId).get();
-    newGLItem.setGridLayout(toSetGridLayout);
-
+  public GridLayoutItem newGridLayoutItemAndNotify(
+      Long gridLayoutId, GridLayoutItemPropsInput propsInput) {
     GridLayoutItemProps props =
         GLItemPropsRepo.save(GLItemPropsUtil.generateGridLayoutItemProps(propsInput));
-    newGLItem.setGridLayoutItemProps(props);
+    GridLayoutItem newItem = GLItemHelper.generateNewGridLayoutItem(gridLayoutId, props);
 
-    GridLayoutItemPosition newPosition = GLItemPositionRepo.save(new GridLayoutItemPosition());
-    newGLItem.setGridLayoutItemPosition(newPosition);
+    User from = newItem.getGridLayout().getUser();
+    List<User> to =
+        propsInput
+            .getChatThreadInput()
+            .getUsers()
+            .stream()
+            .filter((user) -> !user.getId().equals(from.getId()))
+            .collect(Collectors.toList());
+    GridLayoutItemType type = newItem.getGridLayoutItemProps().getType();
+    notificationHelper.publishNotification(to, from, type, props);
 
-    GridLayoutItem savedGridLayoutItem = GLItemRepo.save(newGLItem);
-    GLItemRxBus.send(savedGridLayoutItem);
+    ChatThread chatThread = props.getChatThread();
+    String threadName = propsInput.getChatThreadInput().getThreadName();
+    MapUserChatThread map =
+        mapUserChatThreadRepository
+            .findByUserIdEqualsAndChatThreadIdEquals(from.getId(), chatThread.getId())
+            .get();
+    map.setName(threadName);
+    mapUserChatThreadRepository.save(map);
 
-    List<User> to = propsInput.getChatThreadInput().getUsers();
-    User from = toSetGridLayout.getUser();
-    notificationHelper.publishNotification(to, from, GridLayoutItemType.CHATTING, props);
-
-    return savedGridLayoutItem;
+    return newItem;
   }
 
   public Boolean deleteGridLayout(Long gridLayoutId) {

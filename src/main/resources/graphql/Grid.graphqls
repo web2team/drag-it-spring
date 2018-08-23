@@ -71,7 +71,8 @@ extend type Query {
 
 extend type Mutation {
     newGridLayout(name: String!, userId: ID!): GridLayout!
-    newGridLayoutItem(gridLayoutId: ID!, gridLayoutItemPropsInput: GridLayoutItemPropsInput!): GridLayoutItem!
+#    newGridLayoutItem(gridLayoutId: ID!, gridLayoutItemPropsInput: GridLayoutItemPropsInput!): GridLayoutItem!
+    newGridLayoutItemAndNotify(gridLayoutId: ID!, gridLayoutItemPropsInput: GridLayoutItemPropsInput!): GridLayoutItem!
 
     updateGridLayout(gridLayoutId: ID!, gridLayoutItemId: ID!, gridLayoutItemPosition: GridLayoutItemPositionInput!): GridLayoutItemPosition!
     updateGridLayoutName(gridLayoutId: ID!, name: String!): GridLayout!

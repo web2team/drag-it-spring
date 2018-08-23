@@ -25,6 +25,8 @@ extend type Query {
 
 extend type Mutation {
     newNotification(userId: ID!, notificationInput: NotificationInput): Notification!
+
+    acceptNotification(gridLayoutId: ID!, notificationId: ID!): Boolean!
 #   setReadNotification(....list or one)
 #   setUnReadNotificatoin (...list or one)
 }
