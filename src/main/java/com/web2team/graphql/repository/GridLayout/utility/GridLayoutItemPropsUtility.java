@@ -15,15 +15,19 @@ public class GridLayoutItemPropsUtility {
   private ChatThreadRepository chatThreadRepository;
 
   public GridLayoutItemProps generateGridLayoutItemProps(
-      GridLayoutItemType gridLayoutItemType, GridLayoutItemPropsInput gridLayoutItemPropsInput) {
+      GridLayoutItemPropsInput gridLayoutItemPropsInput) {
     GridLayoutItemProps gridLayoutItemProps = new GridLayoutItemProps();
 
-    if (gridLayoutItemType.equals(GridLayoutItemType.CHATTING)) {
+    GridLayoutItemType type = gridLayoutItemPropsInput.getType();
+    gridLayoutItemProps.setType(type);
+
+    if (type.equals(GridLayoutItemType.CHATTING)) {
       ChatThread chatThread = new ChatThread();
       chatThread.setUsers(gridLayoutItemPropsInput.getChatThreadInput().getUsers());
       ChatThread savedChatThread = chatThreadRepository.save(chatThread);
 
       gridLayoutItemProps.setChatThread(savedChatThread);
+
       return gridLayoutItemProps;
     }
 

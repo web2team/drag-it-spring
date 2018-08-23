@@ -12,6 +12,8 @@ public class GridLayoutItemProps extends GridLayoutItemPropsInput {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  private ChatThread chatThread;
+  @Enumerated(EnumType.STRING)
+  private GridLayoutItemType type;
+
+  @ManyToOne private ChatThread chatThread;
 }

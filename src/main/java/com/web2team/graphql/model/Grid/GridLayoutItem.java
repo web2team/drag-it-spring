@@ -13,9 +13,6 @@ public class GridLayoutItem {
 
   @ManyToOne private GridLayout gridLayout;
 
-  @Enumerated(EnumType.STRING)
-  private GridLayoutItemType gridLayoutItemType;
-
   @OneToOne private GridLayoutItemProps gridLayoutItemProps;
 
   @OneToOne private GridLayoutItemPosition gridLayoutItemPosition;

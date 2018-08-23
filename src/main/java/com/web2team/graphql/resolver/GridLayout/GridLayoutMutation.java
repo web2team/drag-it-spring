@@ -3,7 +3,6 @@ package com.web2team.graphql.resolver.GridLayout;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.web2team.graphql.event.RxBus;
 import com.web2team.graphql.model.Grid.*;
-import com.web2team.graphql.model.Notification.NotificationInput;
 import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPositionRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPropsRepository;
@@ -11,7 +10,7 @@ import com.web2team.graphql.repository.GridLayout.GridLayoutItemRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutRepository;
 import com.web2team.graphql.repository.GridLayout.utility.GridLayoutItemPropsUtility;
 import com.web2team.graphql.repository.User.UserRepository;
-import com.web2team.graphql.resolver.Notification.NotificationMutation;
+import com.web2team.graphql.resolver.Notification.NotificationHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,98 +21,74 @@ import java.util.NoSuchElementException;
 @Component
 @AllArgsConstructor
 public class GridLayoutMutation implements GraphQLMutationResolver {
-  private GridLayoutRepository gridLayoutRepository;
-  private GridLayoutItemRepository gridLayoutItemRepository;
-  private GridLayoutItemPropsRepository gridLayoutItemPropsRepository;
-  private GridLayoutItemPositionRepository gridLayoutItemPositionRepository;
+  private GridLayoutRepository GLRepo;
+  private GridLayoutItemRepository GLItemRepo;
+  private GridLayoutItemPropsRepository GLItemPropsRepo;
+  private GridLayoutItemPositionRepository GLItemPositionRepo;
 
-  private UserRepository userRepository;
+  private UserRepository userRepo;
 
-  private GridLayoutItemPropsUtility gridLayoutItemPropsUtility;
-  private RxBus<GridLayoutItem> gridLayoutItemRxBus;
+  private GridLayoutItemPropsUtility GLItemPropsUtil;
+  private RxBus<GridLayoutItem> GLItemRxBus;
 
-  private NotificationMutation notificationMutation;
+  private NotificationHelper notificationHelper;
 
   public GridLayoutItemPosition updateGridLayout(
       Long gridLayoutId, Long gridLayoutItemId, GridLayoutItemPosition newGridLayoutItemPosition)
       throws InstantiationException, IllegalAccessException {
 
     GridLayoutItemPosition origin =
-        gridLayoutItemRepository
-            .findByGridLayoutIdEqualsAndIdEquals(gridLayoutId, gridLayoutItemId)
+        GLItemRepo.findByGridLayoutIdEqualsAndIdEquals(gridLayoutId, gridLayoutItemId)
             .orElseThrow(
                 () -> new NoSuchElementException("invalid gridLayoutId and gridLayoutItemId"))
             .getGridLayoutItemPosition();
 
     GridLayoutItemPosition toSave = mergeObjects(origin, newGridLayoutItemPosition);
 
-    return gridLayoutItemPositionRepository.save(toSave);
+    return GLItemPositionRepo.save(toSave);
   }
 
   public GridLayout updateGridLayoutName(Long gridLayoutId, String name) {
     GridLayout target =
-        gridLayoutRepository
-            .findById(gridLayoutId)
+        GLRepo.findById(gridLayoutId)
             .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId"));
 
     target.setName(name);
 
-    return gridLayoutRepository.save(target);
+    return GLRepo.save(target);
   }
 
   public GridLayout newGridLayout(String name, Long userId) {
     GridLayout gridLayout = new GridLayout();
 
     User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new NoSuchElementException("invalid userId"));
+        userRepo.findById(userId).orElseThrow(() -> new NoSuchElementException("invalid userId"));
 
     gridLayout.setName(name);
     gridLayout.setUser(user);
 
-    return gridLayoutRepository.save(gridLayout);
+    return GLRepo.save(gridLayout);
   }
 
-  public GridLayoutItem newGridLayoutItem(
-      Long gridLayoutId,
-      GridLayoutItemType gridLayoutItemType,
-      GridLayoutItemPropsInput gridLayoutItemPropsInput) {
+  public GridLayoutItem newGridLayoutItem(Long gridLayoutId, GridLayoutItemPropsInput propsInput) {
+    GridLayoutItem newGLItem = new GridLayoutItem();
 
-    GridLayoutItem gridLayoutItem = new GridLayoutItem();
-
-    GridLayout toSetGridLayout =
-        gridLayoutRepository
-            .findById(gridLayoutId)
-            .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId"));
-    gridLayoutItem.setGridLayout(toSetGridLayout);
-
-    gridLayoutItem.setGridLayoutItemType(gridLayoutItemType);
+    GridLayout toSetGridLayout = GLRepo.findById(gridLayoutId).get();
+    newGLItem.setGridLayout(toSetGridLayout);
 
     GridLayoutItemProps props =
-        gridLayoutItemPropsRepository.save(
-            gridLayoutItemPropsUtility.generateGridLayoutItemProps(
-                gridLayoutItemType, gridLayoutItemPropsInput));
-    gridLayoutItem.setGridLayoutItemProps(props);
+        GLItemPropsRepo.save(GLItemPropsUtil.generateGridLayoutItemProps(propsInput));
+    newGLItem.setGridLayoutItemProps(props);
 
-    gridLayoutItem.setGridLayoutItemPosition(
-        gridLayoutItemPositionRepository.save(new GridLayoutItemPosition()));
+    GridLayoutItemPosition newPosition = GLItemPositionRepo.save(new GridLayoutItemPosition());
+    newGLItem.setGridLayoutItemPosition(newPosition);
 
-    GridLayoutItem savedGridLayoutItem = gridLayoutItemRepository.save(gridLayoutItem);
+    GridLayoutItem savedGridLayoutItem = GLItemRepo.save(newGLItem);
+    GLItemRxBus.send(savedGridLayoutItem);
 
-    gridLayoutItemRxBus.send(savedGridLayoutItem);
-
-    List<User> users = gridLayoutItemPropsInput.getChatThreadInput().getUsers();
-
-    for (User user : users) {
-      NotificationInput input = new NotificationInput();
-      input.setTitle("새로운 초대 알림");
-      input.setMessage(toSetGridLayout.getUser().getName() + "님께서 새로운 채팅방에 초대하셨습니다");
-      input.setGridLayoutItemType(GridLayoutItemType.CHATTING);
-      input.setGridLayoutItemPropsInput(props);
-
-      notificationMutation.newNotification(user.getId(), input);
-    }
+    List<User> to = propsInput.getChatThreadInput().getUsers();
+    User from = toSetGridLayout.getUser();
+    notificationHelper.publishNotification(to, from, GridLayoutItemType.CHATTING, props);
 
     return savedGridLayoutItem;
   }
@@ -121,16 +96,15 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
   public Boolean deleteGridLayout(Long gridLayoutId) {
 
     GridLayout gridLayout =
-        gridLayoutRepository
-            .findById(gridLayoutId)
+        GLRepo.findById(gridLayoutId)
             .orElseThrow(() -> new NoSuchElementException("invalid gridLayoutId"));
-    gridLayoutRepository.delete(gridLayout);
+    GLRepo.delete(gridLayout);
 
     return true;
   }
 
   public Boolean deleteGridLayoutItem(Long gridLayoutItemId) {
-    gridLayoutItemRepository.deleteById(gridLayoutItemId);
+    GLItemRepo.deleteById(gridLayoutItemId);
 
     return true;
   }

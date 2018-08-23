@@ -5,5 +5,7 @@ import lombok.Data;
 
 @Data
 public class GridLayoutItemPropsInput {
+  private GridLayoutItemType type;
+
   private ChatThreadInput chatThreadInput;
 }
