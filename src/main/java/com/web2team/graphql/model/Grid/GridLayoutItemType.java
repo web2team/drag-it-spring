@@ -1,5 +1,7 @@
 package com.web2team.graphql.model.Grid;
 
 public enum GridLayoutItemType {
-  CHATTING
+  CHATTING,
+  CALENDAR,
+  TEXT_EDITOR
 }
