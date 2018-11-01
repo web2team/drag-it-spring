@@ -2,6 +2,7 @@ package com.web2team.graphql.model.User;
 
 import com.web2team.graphql.model.Chat.ChatThread;
 import com.web2team.graphql.model.Grid.GridLayout;
+import com.web2team.graphql.model.Project;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -37,6 +38,10 @@ public class User extends UserInput {
   @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
   @LazyCollection(LazyCollectionOption.FALSE)
   private List<ChatThread> chatThreads;
+
+  @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+  @LazyCollection(LazyCollectionOption.FALSE)
+  private List<Project> projects;
 
   @PrePersist
   protected void onCreate() {

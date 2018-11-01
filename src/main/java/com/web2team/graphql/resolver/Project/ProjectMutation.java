@@ -33,7 +33,7 @@ public class ProjectMutation implements GraphQLMutationResolver {
 
   public Project newProject(Long userId) {
     Project project = new Project();
-    User user = userRepository.findById(userId).get();
+    User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("invalid userId"));
     project.setUsers(Arrays.asList(user));
 
     return projectRepository.save(project);

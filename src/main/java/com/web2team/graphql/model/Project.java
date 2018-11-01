@@ -1,5 +1,6 @@
 package com.web2team.graphql.model;
 
+import com.web2team.graphql.model.Grid.GridLayout;
 import com.web2team.graphql.model.User.User;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ public class Project {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
+  private String name = "새 프로젝트";
 
   private LocalDateTime createdAt;
 
@@ -25,6 +26,13 @@ public class Project {
       joinColumns = @JoinColumn(name = "project_id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
   private List<User> users;
+
+  @OneToMany
+  @JoinTable(
+      name = "map_project_grid_layout",
+      joinColumns = @JoinColumn(name = "project_id"),
+      inverseJoinColumns = @JoinColumn(name = "grid_layout_id"))
+  private List<GridLayout> gridLayouts;
 
   @PrePersist
   protected void onCreate() {

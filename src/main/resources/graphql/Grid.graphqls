@@ -3,6 +3,7 @@ type GridLayout {
     name: String
     user: User!
     gridLayoutItems: [GridLayoutItem]
+    project: Project!
 }
 
 type GridLayoutItem {
