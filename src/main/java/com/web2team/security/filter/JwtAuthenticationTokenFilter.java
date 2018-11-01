@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/** Filter that orchestrates authentication by using supplied JWT token */
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
   @Value("${security.jwt.header}")
@@ -23,10 +22,6 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     super("/api/**");
   }
 
-  /**
-   * Attempt to authenticate request - basically just pass over to another method to authenticate
-   * request headers
-   */
   @Override
   public Authentication attemptAuthentication(
       HttpServletRequest request, HttpServletResponse response) {
@@ -43,16 +38,6 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     return getAuthenticationManager().authenticate(authRequest);
   }
 
-  /**
-   * Make sure the rest of the filterchain is satisfied
-   *
-   * @param request
-   * @param response
-   * @param chain
-   * @param authResult
-   * @throws IOException
-   * @throws ServletException
-   */
   @Override
   protected void successfulAuthentication(
       HttpServletRequest request,
@@ -62,9 +47,6 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
       throws IOException, ServletException {
     super.successfulAuthentication(request, response, chain, authResult);
 
-    // As this authentication is in HTTP header, after success we need to continue the request
-    // normally
-    // and return the response as if the resource was not secured at all
     chain.doFilter(request, response);
   }
 }

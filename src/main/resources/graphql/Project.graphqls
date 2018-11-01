@@ -10,5 +10,6 @@ extend type Query {
 }
 
 extend type Mutation {
-
+    addGridLayoutToProject(gridLayoutId: ID!, projectId: ID!): Project!
+    newProject(userId: ID!): Project!
 }

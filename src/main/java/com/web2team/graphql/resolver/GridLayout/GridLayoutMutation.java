@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.web2team.graphql.model.Chat.ChatThread;
 import com.web2team.graphql.model.Grid.*;
 import com.web2team.graphql.model.MapUserChatThread.MapUserChatThread;
+import com.web2team.graphql.model.Project;
 import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPositionRepository;
 import com.web2team.graphql.repository.GridLayout.GridLayoutItemPropsRepository;
@@ -13,6 +14,7 @@ import com.web2team.graphql.repository.GridLayout.utility.GridLayoutItemPropsUti
 import com.web2team.graphql.repository.MapUserChatThread.MapUserChatThreadRepository;
 import com.web2team.graphql.repository.User.UserRepository;
 import com.web2team.graphql.resolver.Notification.NotificationHelper;
+import com.web2team.graphql.resolver.Project.ProjectMutation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +35,7 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
   private NotificationHelper notificationHelper;
   private GridLayoutItemHelper GLItemHelper;
   private MapUserChatThreadRepository mapUserChatThreadRepository;
+  private ProjectMutation projectMutation;
 
   public GridLayoutItemPosition updateGridLayout(
       Long gridLayoutId, Long gridLayoutItemId, GridLayoutItemPosition newGridLayoutItemPosition)
@@ -68,7 +71,12 @@ public class GridLayoutMutation implements GraphQLMutationResolver {
     gridLayout.setName(name);
     gridLayout.setUser(user);
 
-    return GLRepo.save(gridLayout);
+    GridLayout saved = GLRepo.save(gridLayout);
+    Project project = projectMutation.newProject(userId);
+
+    projectMutation.addGridLayoutToProject(saved.getId(), project.getId());
+
+    return gridLayout;
   }
 
   public GridLayoutItem newGridLayoutItemAndNotify(
