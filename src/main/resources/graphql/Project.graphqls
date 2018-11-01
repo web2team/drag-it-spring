@@ -3,7 +3,7 @@ type Project {
     name: String!
     users: [User]!
     createdAt: String!
-    gridLayouts: [GridLayout]!
+    gridLayouts: [GridLayout]
 }
 
 extend type Query {

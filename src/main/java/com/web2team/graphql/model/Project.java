@@ -3,6 +3,8 @@ package com.web2team.graphql.model;
 import com.web2team.graphql.model.Grid.GridLayout;
 import com.web2team.graphql.model.User.User;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class Project {
   private List<User> users;
 
   @OneToMany
+  @LazyCollection(LazyCollectionOption.FALSE)
   @JoinTable(
       name = "map_project_grid_layout",
       joinColumns = @JoinColumn(name = "project_id"),

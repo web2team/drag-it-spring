@@ -1,6 +1,7 @@
 package com.web2team.graphql.resolver.Project;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import com.web2team.graphql.model.Grid.GridLayout;
 import com.web2team.graphql.model.Project;
 import com.web2team.graphql.repository.ProjectRepository;
 import lombok.AllArgsConstructor;
