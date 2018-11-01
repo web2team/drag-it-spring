@@ -1,7 +1,7 @@
 package com.web2team.graphql.resolver.Project;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import com.web2team.graphql.model.MapProjectGridLayout;
+import com.web2team.graphql.model.MapProjectGridLayout.MapProjectGridLayout;
 import com.web2team.graphql.model.Project;
 import com.web2team.graphql.model.User.User;
 import com.web2team.graphql.repository.MapProjectGridLayoutRepository;

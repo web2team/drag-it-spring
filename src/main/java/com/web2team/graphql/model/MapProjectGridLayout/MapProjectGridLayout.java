@@ -1,14 +1,17 @@
-package com.web2team.graphql.model;
+package com.web2team.graphql.model.MapProjectGridLayout;
 
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import java.io.Serializable;
 
 @Data
 @Entity
-public class MapProjectGridLayout {
+@IdClass(MapProjectGridLayoutId.class)
+public class MapProjectGridLayout implements Serializable {
   @Id
   @Column(name = "project_id")
   Long projectId;

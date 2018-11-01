@@ -12,6 +12,8 @@ import java.io.Serializable;
 @Data
 @IdClass(MapUserChatThreadId.class)
 public class MapUserChatThread implements Serializable {
+
+
   @Id
   @Column(name = "user_id")
   private Long userId;
