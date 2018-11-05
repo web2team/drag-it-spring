@@ -42,6 +42,16 @@ public class GridLayoutItemPropsUtility {
       return gridLayoutItemProps;
     }
 
+    if (type.equals(GridLayoutItemType.TEXT_EDITOR)) {
+      ChatThread chatThread = new ChatThread();
+      chatThread.setUsers(gridLayoutItemPropsInput.getChatThreadInput().getUsers());
+
+      ChatThread savedChatThread = chatThreadRepository.save(chatThread);
+      gridLayoutItemProps.setChatThread(savedChatThread);
+
+      return gridLayoutItemProps;
+    }
+
     throw new RuntimeException("invalid gridLayoutItemType");
   }
 }
