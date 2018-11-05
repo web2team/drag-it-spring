@@ -32,6 +32,16 @@ public class GridLayoutItemPropsUtility {
       return gridLayoutItemProps;
     }
 
+    if (type.equals(GridLayoutItemType.CALENDAR)) {
+      ChatThread chatThread = new ChatThread();
+      chatThread.setUsers(gridLayoutItemPropsInput.getChatThreadInput().getUsers());
+
+      ChatThread savedChatThread = chatThreadRepository.save(chatThread);
+      gridLayoutItemProps.setChatThread(savedChatThread);
+
+      return gridLayoutItemProps;
+    }
+
     throw new RuntimeException("invalid gridLayoutItemType");
   }
 }
